@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'donation_app',
 ]
 
 MIDDLEWARE = [
@@ -54,7 +55,7 @@ ROOT_URLCONF = 'charity_donation.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates']
+        'DIRS': [BASE_DIR / 'donation_app/templates']
         ,
         'APP_DIRS': True,
         'OPTIONS': {
@@ -76,8 +77,11 @@ WSGI_APPLICATION = 'charity_donation.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'HOST': '127.0.0.1',
+        'NAME': 'charity_donation',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'USER': 'postgres',  # pamiętaj o poprawnym skonfigurowaniu
+        'PASSWORD': 'coderslab',  # bazy danych!
     }
 }
 
