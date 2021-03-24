@@ -1,9 +1,13 @@
+from django.contrib.auth.models import User
+from django.contrib.auth.password_validation import validate_password
+from django.core.exceptions import ValidationError
 from django.core.paginator import Paginator
 from django.db.models import Sum
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.urls import reverse
 from django.views import View
 
-from donation_app.models import Donation, Institution
+from donation_app.models import Donation, Institution, MyUser
 
 
 class LandingPageView(View):
@@ -24,6 +28,8 @@ class LandingPageView(View):
         return render(request, 'index.html', ctx)
 
 
+
+
 class AddDonationView(View):
     def get(self, request):
         return render(request, 'form.html')
@@ -37,3 +43,22 @@ class LoginUserView(View):
 class RegisterView(View):
     def get(self, request):
         return render(request, 'register.html')
+
+    def post(self, request):
+        name = request.POST.get('name')
+        surname = request.POST.get('surname')
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+        password2 = request.POST.get('password2')
+
+        if password == password2:
+
+            try:
+                validate_password(password)
+                MyUser.objects.get(email=email)
+                return render(request, 'register.html', {'err': 'Email już jest zajęty'})
+            except ValidationError:
+                return render(request, 'register.html', {'err':'Hasło nie spełnia wymagań'})
+            except:
+                user = MyUser.objects.create_user(email=email, password=password, first_name=name, last_name=surname)
+                return redirect(reverse('login'))
