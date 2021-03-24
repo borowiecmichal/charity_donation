@@ -90,39 +90,22 @@
                 się zajmują, komu pomagają i czego potrzebują.</p>
 
             <ul class="help--slides-items">
-                <li>
-                    <div class="col">
-                        <div class="title">Fundacja "Dbam o Zdrowie"</div>
-                        <div class="subtitle">Cel i misja: Pomoc dzieciom z ubogich rodzin.</div>
-                    </div>
-
-                    <div class="col">
-                        <div class="text">ubrania, jedzenie, sprzęt AGD, meble, zabawki</div>
-                    </div>
-                </li>
-
-                <li>
-                    <div class="col">
-                        <div class="title">Fundacja “Dla dzieci"</div>
-                        <div class="subtitle">Cel i misja: Pomoc osobom znajdującym się w trudnej sytuacji życiowej.
+                {% for item in foundations %}
+                    <li>
+                        <div class="col">
+                            <div class="title">{{ item.name }}</div>
+                            <div class="subtitle">{{ item.description }}</div>
                         </div>
-                    </div>
 
-                    <div class="col">
-                        <div class="text">ubrania, meble, zabawki</div>
-                    </div>
-                </li>
-
-                <li>
-                    <div class="col">
-                        <div class="title">Fundacja “Bez domu”</div>
-                        <div class="subtitle">Cel i misja: Pomoc dla osób nie posiadających miejsca zamieszkania</div>
-                    </div>
-
-                    <div class="col">
-                        <div class="text">ubrania, jedzenie, ciepłe koce</div>
-                    </div>
-                </li>
+                        <div class="col">
+                            <div class="text">
+                                {% for category in item.category.all %}
+                                    {{ category.name }},&nbsp
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </li>
+                {% endfor %}
             </ul>
             <!-- Pagination
             <ul class="help--slides-pagination">
@@ -142,49 +125,23 @@
                 quos suscipit corporis!
             </p>
             <ul class="help--slides-items">
-                <li>
-                    <div class="col">
-                        <div class="title">Organizacja 1</div>
-                        <div class="subtitle">Lorem ipsum dolor sit amet consectetur.</div>
-                    </div>
+                {% for item in ngos %}
+                    <li>
+                        <div class="col">
+                            <div class="title">{{ item.name }}</div>
+                            <div class="subtitle">{{ item.description }}</div>
+                        </div>
 
-                    <div class="col">
-                        <div class="text">Lorem ipsum dolor sit amet consectetur adipisicing elit.</div>
-                    </div>
-                </li>
+                        <div class="col">
+                            <div class="text">
+                                {% for category in item.category.all %}
+                                    {{ category.name }},&nbsp
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </li>
+                {% endfor %}
 
-                <li>
-                    <div class="col">
-                        <div class="title">Organizacja 2</div>
-                        <div class="subtitle">Lorem ipsum dolor sit amet consectetur.</div>
-                    </div>
-
-                    <div class="col">
-                        <div class="text">Lorem ipsum dolor sit amet consectetur adipisicing elit.</div>
-                    </div>
-                </li>
-
-                <li>
-                    <div class="col">
-                        <div class="title">Organizacja 3</div>
-                        <div class="subtitle">Lorem ipsum dolor sit amet consectetur.</div>
-                    </div>
-
-                    <div class="col">
-                        <div class="text">Lorem ipsum dolor sit amet consectetur adipisicing elit.</div>
-                    </div>
-                </li>
-
-                <li>
-                    <div class="col">
-                        <div class="title">Organizacja 4</div>
-                        <div class="subtitle">Lorem ipsum dolor sit amet consectetur.</div>
-                    </div>
-
-                    <div class="col">
-                        <div class="text">Lorem ipsum dolor sit amet consectetur adipisicing elit.</div>
-                    </div>
-                </li>
             </ul>
 
             <!-- Pagination
@@ -203,27 +160,23 @@
             <p>Lorem ipsum dolor sit amet, his ocurreret persequeris ea, ad utinam laudem duo. Verterem adipisci
                 partiendo eos ne, ea his reque quaeque recteque, ne quo lobortis intellegam.</p>
             <ul class="help--slides-items">
-                <li>
-                    <div class="col">
-                        <div class="title">Lokalna zbiórka 1</div>
-                        <div class="subtitle">Lorem ipsum dolor sit amet consectetur.</div>
-                    </div>
+                {% for item in locals %}
+                    <li>
+                        <div class="col">
+                            <div class="title">{{ item.name }}</div>
+                            <div class="subtitle">{{ item.description }}</div>
+                        </div>
 
-                    <div class="col">
-                        <div class="text">Lorem ipsum dolor sit amet consectetur adipisicing elit.</div>
-                    </div>
-                </li>
+                        <div class="col">
+                            <div class="text">
+                                {% for category in item.category.all %}
+                                    {{ category.name }},&nbsp
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </li>
+                {% endfor %}
 
-                <li>
-                    <div class="col">
-                        <div class="title">Lokalna zbiórka 2</div>
-                        <div class="subtitle">Lorem ipsum dolor sit amet consectetur.</div>
-                    </div>
-
-                    <div class="col">
-                        <div class="text">Lorem ipsum dolor sit amet consectetur adipisicing elit.</div>
-                    </div>
-                </li>
             </ul>
 
             <!-- Pagination
