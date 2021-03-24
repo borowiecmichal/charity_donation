@@ -15,7 +15,6 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
@@ -26,7 +25,6 @@ SECRET_KEY = '^1*ip88c$(6k$67tw_hvyb5*1j907^x5f#d7-o3*r)-c$o!fjf'
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
 
 # Application definition
 
@@ -71,20 +69,18 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'charity_donation.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
 DATABASES = {
     'default': {
         'HOST': '127.0.0.1',
-        'NAME': 'charity_donation',
+        'NAME': 'charity_donation2',
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'USER': 'postgres',  # pamiętaj o poprawnym skonfigurowaniu
         'PASSWORD': 'coderslab',  # bazy danych!
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
@@ -104,7 +100,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
 
@@ -118,8 +113,8 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
+AUTH_USER_MODEL = 'donation_app.MyUser'
