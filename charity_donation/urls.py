@@ -20,8 +20,8 @@ from donation_app.views import LandingPageView, AddDonationView, LoginUserView, 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', LandingPageView.as_view(), name='render'),
-    path('donate/', AddDonationView.as_view(), name='render'),
-    path('login/', LoginUserView.as_view(), name='render'),
-    path('register/', RegisterView.as_view(), name='render')
+    path('', LandingPageView.as_view(), name='landing-view'),
+    path('donate/', AddDonationView.as_view(), name='donate'),
+    path('login/', LoginUserView.as_view(), name='login'),
+    path('register/', RegisterView.as_view(), name='register')
 ]
