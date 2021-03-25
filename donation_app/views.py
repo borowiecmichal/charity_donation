@@ -33,7 +33,8 @@ class AddDonationView(View):
     def get(self, request):
         if request.user.is_authenticated:
             ctx={
-                'categories':Category.objects.all()
+                'categories':Category.objects.all(),
+                'institutions': Institution.objects.all()
             }
             return render(request, 'form.html', ctx)
         else:
