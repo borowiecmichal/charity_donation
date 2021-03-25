@@ -8,7 +8,7 @@ from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.views import View
 
-from donation_app.models import Donation, Institution, MyUser
+from donation_app.models import Donation, Institution, MyUser, Category
 
 
 class LandingPageView(View):
@@ -29,23 +29,31 @@ class LandingPageView(View):
         return render(request, 'index.html', ctx)
 
 
-
-
 class AddDonationView(View):
     def get(self, request):
-        return render(request, 'form.html')
+        if request.user.is_authenticated:
+            ctx={
+                'categories':Category.objects.all()
+            }
+            return render(request, 'form.html', ctx)
+        else:
+            return redirect(reverse('login'))
 
 
 class LoginUserView(View):
     def get(self, request):
         return render(request, 'login.html')
+
     def post(self, request):
         email = request.POST.get('email')
         password = request.POST.get('password')
         user = authenticate(email=email, password=password)
         if user:
             login(request, user)
-        return redirect(reverse('landing-view'))
+            return redirect(reverse('landing-view'))
+        else:
+            return redirect(reverse('register'))
+
 
 class LogoutUserView(View):
     def get(self, request):
@@ -71,9 +79,7 @@ class RegisterView(View):
                 MyUser.objects.get(email=email)
                 return render(request, 'register.html', {'err': 'Email już jest zajęty'})
             except ValidationError:
-                return render(request, 'register.html', {'err':'Hasło nie spełnia wymagań'})
+                return render(request, 'register.html', {'err': 'Hasło nie spełnia wymagań'})
             except:
                 user = MyUser.objects.create_user(email=email, password=password, first_name=name, last_name=surname)
                 return redirect(reverse('login'))
-
-
