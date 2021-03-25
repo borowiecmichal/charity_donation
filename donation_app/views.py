@@ -1,3 +1,4 @@
+
 from django.contrib.auth.models import User
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
@@ -38,6 +39,10 @@ class AddDonationView(View):
 class LoginUserView(View):
     def get(self, request):
         return render(request, 'login.html')
+    def post(self, request):
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+        authenticate()
 
 
 class RegisterView(View):
