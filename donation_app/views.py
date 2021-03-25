@@ -62,3 +62,5 @@ class RegisterView(View):
             except:
                 user = MyUser.objects.create_user(email=email, password=password, first_name=name, last_name=surname)
                 return redirect(reverse('login'))
+
+
