@@ -1,4 +1,4 @@
-
+from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
@@ -42,7 +42,10 @@ class LoginUserView(View):
     def post(self, request):
         email = request.POST.get('email')
         password = request.POST.get('password')
-        authenticate()
+        user = authenticate(email=email, password=password)
+        if user:
+            login(request, user)
+        return redirect(reverse('landing-view'))
 
 
 class RegisterView(View):
