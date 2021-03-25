@@ -246,6 +246,7 @@ document.addEventListener("DOMContentLoaded", function() {
       e.preventDefault();
       this.currentStep++;
       this.updateForm();
+      // tutaj fetch
     }
   }
   const form = document.querySelector(".form--steps");
