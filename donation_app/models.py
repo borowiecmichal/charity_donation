@@ -1,4 +1,4 @@
-from django.contrib.auth.models import AbstractUser, UserManager as DjangoUerMAnager
+from django.contrib.auth.models import AbstractUser, UserManager as DjangoUserManager
 from django.db import models
 
 from charity_donation import settings
@@ -35,7 +35,7 @@ class Donation(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, default=None, null=True, on_delete=models.SET_DEFAULT)
 
 
-class UserManager(DjangoUerMAnager):
+class UserManager(DjangoUserManager):
     def _create_user(self, email, password, **extra_fields):
         if not email:
             raise ValueError('The given username must be set')

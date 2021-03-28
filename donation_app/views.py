@@ -7,7 +7,9 @@ from django.db.models import Sum
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.views import View
+from django.views.generic import FormView
 
+from donation_app.forms import UserCreateForm
 from donation_app.models import Donation, Institution, MyUser, Category
 
 
@@ -32,8 +34,8 @@ class LandingPageView(View):
 class AddDonationView(View):
     def get(self, request):
         if request.user.is_authenticated:
-            ctx={
-                'categories':Category.objects.all(),
+            ctx = {
+                'categories': Category.objects.all(),
                 'institutions': Institution.objects.all()
             }
             return render(request, 'form.html', ctx)
@@ -62,25 +64,38 @@ class LogoutUserView(View):
         return redirect(reverse('landing-view'))
 
 
-class RegisterView(View):
-    def get(self, request):
-        return render(request, 'register.html')
+# class RegisterView(View):
+#     def get(self, request):
+#         return render(request, 'register.html')
+#
+#     def post(self, request):
+#         name = request.POST.get('name')
+#         surname = request.POST.get('surname')
+#         email = request.POST.get('email')
+#         password = request.POST.get('password')
+#         password2 = request.POST.get('password2')
+#
+#         if password == password2:
+#
+#             try:
+#                 validate_password(password)
+#                 MyUser.objects.get(email=email)
+#                 return render(request, 'register.html', {'err': 'Email już jest zajęty'})
+#             except ValidationError:
+#                 return render(request, 'register.html', {'err': 'Hasło nie spełnia wymagań'})
+#             except:
+#                 user = MyUser.objects.create_user(email=email, password=password, first_name=name, last_name=surname)
+#                 return redirect(reverse('login'))
 
-    def post(self, request):
-        name = request.POST.get('name')
-        surname = request.POST.get('surname')
-        email = request.POST.get('email')
-        password = request.POST.get('password')
-        password2 = request.POST.get('password2')
+class RegisterView(FormView):
+    form_class = UserCreateForm
+    template_name = 'register.html'
 
-        if password == password2:
+    def get_success_url(self):
+        return reverse('landing-view')  # success_url may be lazy
 
-            try:
-                validate_password(password)
-                MyUser.objects.get(email=email)
-                return render(request, 'register.html', {'err': 'Email już jest zajęty'})
-            except ValidationError:
-                return render(request, 'register.html', {'err': 'Hasło nie spełnia wymagań'})
-            except:
-                user = MyUser.objects.create_user(email=email, password=password, first_name=name, last_name=surname)
-                return redirect(reverse('login'))
+    def form_valid(self, form):
+        # This method is called when valid form data has been POSTed.
+        # It should return an HttpResponse.
+        form.send_email()
+        return super().form_valid(form)
