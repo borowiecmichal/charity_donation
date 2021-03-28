@@ -1,6 +1,7 @@
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.contrib.auth.password_validation import validate_password
+from django.contrib.auth.views import LoginView
 from django.core.exceptions import ValidationError
 from django.core.paginator import Paginator
 from django.db.models import Sum
@@ -9,7 +10,7 @@ from django.urls import reverse
 from django.views import View
 from django.views.generic import FormView
 
-from donation_app.forms import UserCreateForm
+from donation_app.forms import UserCreateForm, LoginForm
 from donation_app.models import Donation, Institution, MyUser, Category
 
 
@@ -43,20 +44,26 @@ class AddDonationView(View):
             return redirect(reverse('login'))
 
 
-class LoginUserView(View):
-    def get(self, request):
-        return render(request, 'login.html')
+# class LoginUserView(View):
+#     def get(self, request):
+#         return render(request, 'login.html')
+#
+#     def post(self, request):
+#         email = request.POST.get('email')
+#         password = request.POST.get('password')
+#         user = authenticate(email=email, password=password)
+#         if user:
+#             login(request, user)
+#             return redirect(reverse('landing-view'))
+#         else:
+#             return redirect(reverse('register'))
 
-    def post(self, request):
-        email = request.POST.get('email')
-        password = request.POST.get('password')
-        user = authenticate(email=email, password=password)
-        if user:
-            login(request, user)
-            return redirect(reverse('landing-view'))
-        else:
-            return redirect(reverse('register'))
+class LoginUserView(LoginView):
+    form_class = LoginForm
+    template_name = 'login.html'
 
+    def get_success_url(self):
+        return reverse('landing-view')
 
 class LogoutUserView(View):
     def get(self, request):
@@ -97,5 +104,5 @@ class RegisterView(FormView):
     def form_valid(self, form):
         # This method is called when valid form data has been POSTed.
         # It should return an HttpResponse.
-        form.send_email()
+        MyUser.objects.create_user(email=form.cleaned_data['email'], password=form.cleaned_data['password1'], first_name=form.cleaned_data['first_name'], last_name=form.cleaned_data['last_name'])
         return super().form_valid(form)
