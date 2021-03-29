@@ -237,13 +237,9 @@ document.addEventListener("DOMContentLoaded", function () {
             this.$step.parentElement.hidden = this.currentStep >= 6;
 
             let summary_div = document.querySelector(".summary");
-            console.log(summary_div);
             let items_and_institution_div = summary_div.querySelector('.form-section');
-            console.log(items_and_institution_div);
             let address_ul = items_and_institution_div.nextElementSibling.querySelector('ul')
-            console.log(address_ul);
             let date_ul = address_ul.parentElement.nextElementSibling.querySelector('ul');
-            console.log(date_ul);
 
             let form_steps = document.querySelectorAll("div[data-step]");
             console.log(form_steps);
@@ -272,8 +268,22 @@ document.addEventListener("DOMContentLoaded", function () {
                     institution_checked = el;
                 }
             })
-
             summary_item2.innerText = 'Dla ' + institution_checked.parentElement.lastElementChild.firstElementChild.innerText
+
+            let address_list_items = address_ul.querySelectorAll('li');
+            let address_inputs_form = form_step4.querySelectorAll('input')
+            let notices = form_step4.querySelector("textarea");
+            let date_list_items = date_ul.querySelectorAll('li')
+            console.log(address_inputs_form);
+
+            address_list_items[0].innerText = address_inputs_form[0].value;
+            address_list_items[1].innerText = address_inputs_form[1].value;
+            address_list_items[2].innerText = address_inputs_form[2].value;
+            address_list_items[3].innerText = address_inputs_form[3].value;
+            date_list_items[0].innerText = address_inputs_form[4].value;
+            date_list_items[1].innerText = address_inputs_form[5].value;
+            date_list_items[2].innerText = notices.value;
+
 
 
             // TODO: get data from inputs and show them in summary
