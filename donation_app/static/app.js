@@ -234,6 +234,17 @@ document.addEventListener("DOMContentLoaded", function() {
       this.$stepInstructions[0].parentElement.parentElement.hidden = this.currentStep >= 6;
       this.$step.parentElement.hidden = this.currentStep >= 6;
 
+      let summary_div = document.querySelector(".summary");
+      console.log(summary_div);
+      let items_and_institution_div = summary_div.querySelector('.form-section');
+      console.log(items_and_institution_div);
+      let address_ul = items_and_institution_div.nextElementSibling.querySelector('ul')
+          console.log(address_ul);
+      let date_ul = address_ul.parentElement.nextElementSibling.querySelector('ul');
+      console.log(date_ul);
+
+
+
       // TODO: get data from inputs and show them in summary
     }
 
