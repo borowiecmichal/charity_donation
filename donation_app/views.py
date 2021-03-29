@@ -6,7 +6,7 @@ from django.core.exceptions import ValidationError
 from django.core.paginator import Paginator
 from django.db.models import Sum
 from django.shortcuts import render, redirect
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from django.views import View
 from django.views.generic import FormView
 
@@ -65,6 +65,7 @@ class LoginUserView(LoginView):
     def get_success_url(self):
         return reverse('landing-view')
 
+
 class LogoutUserView(View):
     def get(self, request):
         logout(request)
@@ -97,12 +98,12 @@ class LogoutUserView(View):
 class RegisterView(FormView):
     form_class = UserCreateForm
     template_name = 'register.html'
+    success_url = reverse_lazy('landing-view')
 
-    def get_success_url(self):
-        return reverse('landing-view')  # success_url may be lazy
 
     def form_valid(self, form):
         # This method is called when valid form data has been POSTed.
         # It should return an HttpResponse.
-        MyUser.objects.create_user(email=form.cleaned_data['email'], password=form.cleaned_data['password1'], first_name=form.cleaned_data['first_name'], last_name=form.cleaned_data['last_name'])
+        MyUser.objects.create_user(email=form.cleaned_data['email'], password=form.cleaned_data['password1'],
+                                   first_name=form.cleaned_data['first_name'], last_name=form.cleaned_data['last_name'])
         return super().form_valid(form)
