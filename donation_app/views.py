@@ -147,3 +147,7 @@ class RegisterView(FormView):
         MyUser.objects.create_user(email=form.cleaned_data['email'], password=form.cleaned_data['password1'],
                                    first_name=form.cleaned_data['first_name'], last_name=form.cleaned_data['last_name'])
         return super().form_valid(form)
+
+class UserProfileView(View):
+    def get(self, request):
+        return render(request, 'user-profile.html')
