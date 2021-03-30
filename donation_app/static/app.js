@@ -317,7 +317,11 @@ document.addEventListener("DOMContentLoaded", function () {
                 },
                 method: "POST",
                 dataType: "json",
-            })
+                success: function (response) {
+                    window.location.href = 'form-confirmation.html';
+                    }
+                }
+            )
         }
     }
 

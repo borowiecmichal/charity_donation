@@ -20,6 +20,13 @@ class Institution(models.Model):
     type = models.IntegerField(choices=TYPE_CHOICES, default=1)
     category = models.ManyToManyField(Category)
 
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = 'Instytucja'
+        verbose_name_plural = 'Instytucje'
+
 
 class Donation(models.Model):
     quantity = models.IntegerField()

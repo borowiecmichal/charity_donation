@@ -55,9 +55,9 @@ class AddDonationView(View):
 
     def post(self, request):
         if request.is_ajax and request.method == "POST":
-            print('57', request.POST)
+
             form_data_list = json.loads(request.POST['formData'])
-            print(form_data_list)
+
             form_data_dict = {}
             categories_form=[]
             for field in form_data_list:
@@ -66,7 +66,7 @@ class AddDonationView(View):
                     form_data_dict['categories'] = categories_form
                 else:
                     form_data_dict[field["name"]] = field["value"]
-            print(form_data_dict)
+
             donation = Donation.objects.create(quantity=form_data_dict['bags'],
                                                institution_id=form_data_dict['organization'],
                                                address=form_data_dict['address'],
