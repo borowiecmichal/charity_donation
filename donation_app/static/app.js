@@ -285,7 +285,6 @@ document.addEventListener("DOMContentLoaded", function () {
             date_list_items[2].innerText = notices.value;
 
 
-
             // TODO: get data from inputs and show them in summary
         }
 
@@ -298,9 +297,30 @@ document.addEventListener("DOMContentLoaded", function () {
             e.preventDefault();
             this.currentStep++;
             this.updateForm();
-            // tutaj fetch
+            // let str = $("#donate-form").serializeArray();
+            // console.log(str);
+            // const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+            // // tutaj fetch
+            // fetch('/donate/', {
+            //     method: 'post',
+            //     headers: {'X-CSRFToken': csrftoken},
+            //     body: str,
+            // })
+            let csrfmiddlewaretoken = $("#donate-form").find("input[name='csrfmiddlewaretoken']").val();
+            let formData = $('#donate-form').serializeArray();
+            formData = JSON.stringify(formData);
+            $.ajax({
+                url: '/donate/',
+                data: {
+                    "csrfmiddlewaretoken": csrfmiddlewaretoken,
+                    "formData": formData
+                },
+                method: "POST",
+                dataType: "json",
+            })
         }
     }
+
 
     const form = document.querySelector(".form--steps");
     if (form !== null) {

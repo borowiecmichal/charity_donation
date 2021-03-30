@@ -1,3 +1,5 @@
+import json
+
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.contrib.auth.password_validation import validate_password
@@ -5,9 +7,12 @@ from django.contrib.auth.views import LoginView
 from django.core.exceptions import ValidationError
 from django.core.paginator import Paginator
 from django.db.models import Sum
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse, reverse_lazy
+from django.utils.decorators import method_decorator
 from django.views import View
+from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import FormView
 
 from donation_app.forms import UserCreateForm, LoginForm
@@ -33,6 +38,10 @@ class LandingPageView(View):
 
 
 class AddDonationView(View):
+    # @method_decorator(csrf_exempt)
+    # def dispatch(self, request, *args, **kwargs):
+    #     return super().dispatch(request, *args, **kwargs)
+
     def get(self, request):
         if request.user.is_authenticated:
             ctx = {
@@ -42,6 +51,18 @@ class AddDonationView(View):
             return render(request, 'form.html', ctx)
         else:
             return redirect(reverse('login'))
+
+    def post(self, request):
+        if request.is_ajax and request.method == "POST":
+            print('57', request.POST)
+            form_data_list = json.loads(request.POST['formData'])
+            print(form_data_list)
+            form_data_dict = {}
+            for field in form_data_list:
+                form_data_dict[field["name"]] = field["value"]
+            print(form_data_dict)
+
+            return HttpResponse('donate POST view')
 
 
 # class LoginUserView(View):
@@ -99,7 +120,6 @@ class RegisterView(FormView):
     form_class = UserCreateForm
     template_name = 'register.html'
     success_url = reverse_lazy('landing-view')
-
 
     def form_valid(self, form):
         # This method is called when valid form data has been POSTed.
