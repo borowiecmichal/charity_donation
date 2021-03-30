@@ -40,7 +40,7 @@ class Donation(models.Model):
     pick_up_time = models.TimeField()
     pick_up_comment = models.TextField()
     user = models.ForeignKey(settings.AUTH_USER_MODEL, default=None, null=True, on_delete=models.SET_DEFAULT)
-
+    is_taken = models.BooleanField(default=False)
 
 class UserManager(DjangoUserManager):
     def _create_user(self, email, password, **extra_fields):

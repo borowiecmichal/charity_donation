@@ -151,3 +151,14 @@ class RegisterView(FormView):
 class UserProfileView(View):
     def get(self, request):
         return render(request, 'user-profile.html')
+
+
+class TakeDonationView(View):
+    def get(self, request, id):
+        donation = Donation.objects.get(pk=id)
+        if donation.is_taken:
+            donation.is_taken = False
+        else:
+            donation.is_taken = True
+        donation.save()
+        return redirect(reverse('user-profile'))

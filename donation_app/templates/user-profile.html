@@ -5,8 +5,17 @@
     <h4>{{ request.user.email }}</h4>
     <ul>
         {% for donation in request.user.donation_set.all %}
-            <li>{{ donation.quantity }} worków dla {{ donation.institution.name }} zawierające {% for category in donation.categories.all %} {{ category.name }}{% endfor %} odebrane dnia {{ donation.pick_up_date }} o godzinie
+            <li>{{ donation.quantity }} worków dla {{ donation.institution.name }} zawierające
+                {% for category in donation.categories.all %} {{ category.name }}{% endfor %} odebrane
+                dnia {{ donation.pick_up_date }} o godzinie
                 {{ donation.pick_up_time }}</li>
+            <button onclick="location.href='{% url 'take-donation' donation.id %}'">
+                {% if donation.is_taken %}
+                Zabrany
+                    {% else %}
+                    Niezabrany
+                {% endif %}
+            </button>
         {% endfor %}
     </ul>
 {% endblock %}
