@@ -1,3 +1,4 @@
+import datetime
 import json
 
 from django.contrib.auth import authenticate, login, logout
@@ -58,10 +59,29 @@ class AddDonationView(View):
             form_data_list = json.loads(request.POST['formData'])
             print(form_data_list)
             form_data_dict = {}
+            categories_form=[]
             for field in form_data_list:
-                form_data_dict[field["name"]] = field["value"]
+                if field["name"] == 'categories':
+                    categories_form.append(field['value'])
+                    form_data_dict['categories'] = categories_form
+                else:
+                    form_data_dict[field["name"]] = field["value"]
             print(form_data_dict)
-
+            donation = Donation.objects.create(quantity=form_data_dict['bags'],
+                                               institution_id=form_data_dict['organization'],
+                                               address=form_data_dict['address'],
+                                               phone_number=form_data_dict['phone'],
+                                               city=form_data_dict['city'],
+                                               zip_code=form_data_dict['postcode'],
+                                               pick_up_date=datetime.datetime.strptime(form_data_dict['data'],
+                                                                                       '%Y-%m-%d').date(),
+                                               pick_up_time=datetime.datetime.strptime(form_data_dict['time'],
+                                                                                       '%H:%M').time(),
+                                               pick_up_comment=form_data_dict['more_info'],
+                                               user=request.user
+                                               )
+            for id_category in categories_form:
+                donation.categories.add(Category.objects.get(id=id_category))
             return HttpResponse('donate POST view')
 
 
