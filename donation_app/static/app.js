@@ -306,19 +306,14 @@ document.addEventListener("DOMContentLoaded", function () {
             //     headers: {'X-CSRFToken': csrftoken},
             //     body: str,
             // })
-            let csrfmiddlewaretoken = $("#donate-form").find("input[name='csrfmiddlewaretoken']").val();
-            let formData = $('#donate-form').serializeArray();
-            formData = JSON.stringify(formData);
+
             $.ajax({
                 url: '/donate/',
-                data: {
-                    "csrfmiddlewaretoken": csrfmiddlewaretoken,
-                    "formData": formData
-                },
+                data: $('#donate-form').serializeArray(),
                 method: "POST",
                 dataType: "json",
                 success: function (response) {
-                    window.location.href = 'form-confirmation.html';
+                    window.location.href = response.url_success;
                     }
                 }
             )

@@ -8,7 +8,7 @@ from django.contrib.auth.views import LoginView
 from django.core.exceptions import ValidationError
 from django.core.paginator import Paginator
 from django.db.models import Sum
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse, reverse_lazy
 from django.utils.decorators import method_decorator
@@ -54,19 +54,10 @@ class AddDonationView(View):
             return redirect(reverse('login'))
 
     def post(self, request):
-        if request.is_ajax and request.method == "POST":
+        if request.is_ajax:
 
-            form_data_list = json.loads(request.POST['formData'])
-
-            form_data_dict = {}
-            categories_form=[]
-            for field in form_data_list:
-                if field["name"] == 'categories':
-                    categories_form.append(field['value'])
-                    form_data_dict['categories'] = categories_form
-                else:
-                    form_data_dict[field["name"]] = field["value"]
-
+            form_data_dict = request.POST
+# DODAĆ MODELFORM DLA TEGO WIDOKU
             donation = Donation.objects.create(quantity=form_data_dict['bags'],
                                                institution_id=form_data_dict['organization'],
                                                address=form_data_dict['address'],
@@ -80,9 +71,9 @@ class AddDonationView(View):
                                                pick_up_comment=form_data_dict['more_info'],
                                                user=request.user
                                                )
-            for id_category in categories_form:
+            for id_category in request.POST['categories']:
                 donation.categories.add(Category.objects.get(id=id_category))
-            return HttpResponse('donate POST view')
+            return JsonResponse({'url_success': reverse('landing-view')})
 
 
 # class LoginUserView(View):
@@ -147,6 +138,7 @@ class RegisterView(FormView):
         MyUser.objects.create_user(email=form.cleaned_data['email'], password=form.cleaned_data['password1'],
                                    first_name=form.cleaned_data['first_name'], last_name=form.cleaned_data['last_name'])
         return super().form_valid(form)
+
 
 class UserProfileView(View):
     def get(self, request):

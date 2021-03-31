@@ -119,4 +119,4 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 AUTH_USER_MODEL = 'donation_app.MyUser'
-AUTHENTICATION_BACKENDS = ['donation_app.emailBackend.EmailBackend']
+# AUTHENTICATION_BACKENDS = ['donation_app.emailBackend.EmailBackend']
