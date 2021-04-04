@@ -277,6 +277,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 console.log(categories_checked_id);
 
+                institutions.forEach(institution => {
+                    let inst_categories = institution.dataset.categories.split(" ");
+                    console.log(institution.dataset.categories);
+                    console.log(inst_categories);
+                })
+
 
             }
 
