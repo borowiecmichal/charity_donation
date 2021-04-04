@@ -281,6 +281,11 @@ document.addEventListener("DOMContentLoaded", function () {
                     let inst_categories = institution.dataset.categories.split(" ");
                     console.log(institution.dataset.categories);
                     console.log(inst_categories);
+                    categories_checked_id.forEach(checked_category =>{
+                        if(!inst_categories.includes(checked_category)){
+                            institution.parentElement.parentElement.style.display='none'
+                        }
+                    })
                 })
 
 
