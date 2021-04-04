@@ -249,12 +249,19 @@ document.addEventListener("DOMContentLoaded", function () {
 
             let summary_item1 = items_and_institution_div.querySelector("ul").firstElementChild.lastElementChild;
             let summary_item2 = items_and_institution_div.querySelector("ul").lastElementChild.lastElementChild;
-            let num_of_bags = form_step2.querySelector('div').firstElementChild.firstElementChild.value
+            let num_of_bags = form_step2.querySelector('div').firstElementChild.firstElementChild.value;
             let checkboxes = document.querySelectorAll("input[type='checkbox']");
+
             let categories_checked = []
             checkboxes.forEach(el => {
                 if (el.checked === true) {
                     categories_checked.push(el.parentElement.lastElementChild.innerText)
+                }})
+
+            let categories_checked_id = []
+            checkboxes.forEach(el => {
+                if (el.checked === true) {
+                    categories_checked_id.push(el.value)
                 }
             })
 
@@ -268,7 +275,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
             if (form_step3.classList.contains("active")) {
 
-                console.log('aaa');
+                console.log(categories_checked_id);
+
 
             }
 
