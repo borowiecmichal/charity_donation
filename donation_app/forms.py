@@ -1,7 +1,7 @@
 from django.contrib.auth import password_validation, authenticate, get_user_model
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.core.exceptions import ValidationError
-from django.forms import forms, EmailField, PasswordInput, CharField, TextInput, EmailInput
+from django.forms import forms, EmailField, PasswordInput, CharField, TextInput, EmailInput, ModelForm
 from django.utils.text import capfirst
 
 from donation_app.models import MyUser
@@ -54,3 +54,16 @@ class LoginForm(AuthenticationForm):
                 self.confirm_login_allowed(self.user_cache)
 
         return self.cleaned_data
+
+
+class UpdateUserForm(ModelForm):
+    field_order = ['email', 'first_name', 'last_name']
+
+    class Meta:
+        model = MyUser
+        fields = ('first_name', 'last_name', 'email',)
+        widgets = {
+            'email': EmailInput(attrs={'placeholder': 'Email'}),
+            'first_name': TextInput(attrs={'placeholder': 'Imię'}),
+            'last_name': TextInput(attrs={'placeholder': 'Nazwisko'}),
+        }

@@ -1,9 +1,9 @@
 {% extends 'base.html' %}
-{% block title %}Rejestracja{% endblock %}
+{% block title %}Uaktualnij dane{% endblock %}
 {% block content %}
 
     <section class="login-page">
-        <h2>Załóż konto</h2>
+        <h2>Wpisz aktualne dane</h2>
         <form method="post">
             {% csrf_token %}
             {% for field in form %}
@@ -14,13 +14,10 @@
                 {% for error in field.errors %}
                     <p style="color: red">{{ error }}</p>
                 {% endfor %}
-
             {% endfor %}
 
-
             <div class="form-group form-group--buttons">
-                <a href="{% url 'login' %}" class="btn btn--without-border">Zaloguj się</a>
-                <button class="btn" type="submit">Załóż konto</button>
+                <button class="btn" type="submit">Zapisz</button>
             </div>
         </form>
     </section>

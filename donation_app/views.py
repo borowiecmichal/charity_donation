@@ -14,9 +14,9 @@ from django.urls import reverse, reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.decorators.csrf import csrf_exempt
-from django.views.generic import FormView
+from django.views.generic import FormView, UpdateView
 
-from donation_app.forms import UserCreateForm, LoginForm
+from donation_app.forms import UserCreateForm, LoginForm, UpdateUserForm
 from donation_app.models import Donation, Institution, MyUser, Category
 
 
@@ -57,7 +57,7 @@ class AddDonationView(View):
         if request.is_ajax:
 
             form_data_dict = request.POST
-# DODAĆ MODELFORM DLA TEGO WIDOKU
+            # DODAĆ MODELFORM DLA TEGO WIDOKU
             donation = Donation.objects.create(quantity=form_data_dict['bags'],
                                                institution_id=form_data_dict['organization'],
                                                address=form_data_dict['address'],
@@ -76,20 +76,6 @@ class AddDonationView(View):
             return JsonResponse({'url_success': reverse('landing-view')})
 
 
-# class LoginUserView(View):
-#     def get(self, request):
-#         return render(request, 'login.html')
-#
-#     def post(self, request):
-#         email = request.POST.get('email')
-#         password = request.POST.get('password')
-#         user = authenticate(email=email, password=password)
-#         if user:
-#             login(request, user)
-#             return redirect(reverse('landing-view'))
-#         else:
-#             return redirect(reverse('register'))
-
 class LoginUserView(LoginView):
     form_class = LoginForm
     template_name = 'login.html'
@@ -103,29 +89,6 @@ class LogoutUserView(View):
         logout(request)
         return redirect(reverse('landing-view'))
 
-
-# class RegisterView(View):
-#     def get(self, request):
-#         return render(request, 'register.html')
-#
-#     def post(self, request):
-#         name = request.POST.get('name')
-#         surname = request.POST.get('surname')
-#         email = request.POST.get('email')
-#         password = request.POST.get('password')
-#         password2 = request.POST.get('password2')
-#
-#         if password == password2:
-#
-#             try:
-#                 validate_password(password)
-#                 MyUser.objects.get(email=email)
-#                 return render(request, 'register.html', {'err': 'Email już jest zajęty'})
-#             except ValidationError:
-#                 return render(request, 'register.html', {'err': 'Hasło nie spełnia wymagań'})
-#             except:
-#                 user = MyUser.objects.create_user(email=email, password=password, first_name=name, last_name=surname)
-#                 return redirect(reverse('login'))
 
 class RegisterView(FormView):
     form_class = UserCreateForm
@@ -154,3 +117,20 @@ class TakeDonationView(View):
             donation.is_taken = True
         donation.save()
         return redirect(reverse('user-profile'))
+
+
+class UpdateProfile(View):
+    def get(self, request):
+        form = UpdateUserForm(initial={
+            'first_name': request.user.first_name,
+            'last_name': request.user.last_name,
+            'email': request.user.email,
+        })
+        return render(request, 'updateProfile.html', {'form': form})
+
+    def post(self, request):
+        form = UpdateUserForm(request.POST)
+        if form.is_valid():
+            user = form.save(commit=False)
+            user.save()
+            return redirect(reverse('landing-view'))
