@@ -242,12 +242,10 @@ document.addEventListener("DOMContentLoaded", function () {
             let date_ul = address_ul.parentElement.nextElementSibling.querySelector('ul');
 
             let form_steps = document.querySelectorAll("div[data-step]");
-            console.log(form_steps);
             let form_step1 = form_steps[0] //given items
             let form_step2 = form_steps[1] //number of bags
             let form_step3 = form_steps[2] //institution
             let form_step4 = form_steps[3] // address and date
-            console.log(form_step1, form_step2, form_step3, form_step4);
 
             let summary_item1 = items_and_institution_div.querySelector("ul").firstElementChild.lastElementChild;
             let summary_item2 = items_and_institution_div.querySelector("ul").lastElementChild.lastElementChild;
@@ -259,7 +257,6 @@ document.addEventListener("DOMContentLoaded", function () {
                     categories_checked.push(el.parentElement.lastElementChild.innerText)
                 }
             })
-            summary_item1.innerText = num_of_bags + ' worki zawierające ' + categories_checked.join(', ')
 
             let institutions = form_step3.querySelectorAll("input[type='radio']");
             let institution_checked = ''
@@ -268,24 +265,30 @@ document.addEventListener("DOMContentLoaded", function () {
                     institution_checked = el;
                 }
             })
-            summary_item2.innerText = 'Dla ' + institution_checked.parentElement.lastElementChild.firstElementChild.innerText
 
-            let address_list_items = address_ul.querySelectorAll('li');
-            let address_inputs_form = form_step4.querySelectorAll('input')
-            let notices = form_step4.querySelector("textarea");
-            let date_list_items = date_ul.querySelectorAll('li')
-            console.log(address_inputs_form);
+            if (form_step3.classList.contains("active")) {
 
-            address_list_items[0].innerText = address_inputs_form[0].value;
-            address_list_items[1].innerText = address_inputs_form[1].value;
-            address_list_items[2].innerText = address_inputs_form[2].value;
-            address_list_items[3].innerText = address_inputs_form[3].value;
-            date_list_items[0].innerText = address_inputs_form[4].value;
-            date_list_items[1].innerText = address_inputs_form[5].value;
-            date_list_items[2].innerText = notices.value;
+                console.log('aaa');
 
+            }
 
-            // TODO: get data from inputs and show them in summary
+            if (form_step4.classList.contains("active")) {
+                summary_item1.innerText = num_of_bags + ' worki zawierające ' + categories_checked.join(', ')
+                summary_item2.innerText = 'Dla ' + institution_checked.parentElement.lastElementChild.firstElementChild.innerText
+                let address_list_items = address_ul.querySelectorAll('li');
+                let address_inputs_form = form_step4.querySelectorAll('input')
+                let notices = form_step4.querySelector("textarea");
+                let date_list_items = date_ul.querySelectorAll('li')
+
+                address_list_items[0].innerText = address_inputs_form[0].value;
+                address_list_items[1].innerText = address_inputs_form[1].value;
+                address_list_items[2].innerText = address_inputs_form[2].value;
+                address_list_items[3].innerText = address_inputs_form[3].value;
+                date_list_items[0].innerText = address_inputs_form[4].value;
+                date_list_items[1].innerText = address_inputs_form[5].value;
+                date_list_items[2].innerText = notices.value;
+            }
+
         }
 
         /**
@@ -308,16 +311,18 @@ document.addEventListener("DOMContentLoaded", function () {
             // })
 
             $.ajax({
-                url: '/donate/',
-                data: $('#donate-form').serializeArray(),
-                method: "POST",
-                dataType: "json",
-                success: function (response) {
-                    window.location.href = response.url_success;
+                    url: '/donate/',
+                    data: $('#donate-form').serializeArray(),
+                    method: "POST",
+                    dataType: "json",
+                    success: function (response) {
+                        window.location.href = response.url_success;
                     }
                 }
             )
         }
+
+
     }
 
 
@@ -325,4 +330,11 @@ document.addEventListener("DOMContentLoaded", function () {
     if (form !== null) {
         new FormSteps(form);
     }
+
+
+    /**
+     Hiding istitutions
+     */
+
+
 });
