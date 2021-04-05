@@ -129,7 +129,7 @@ class UpdateProfile(View):
         return render(request, 'updateProfile.html', {'form': form})
 
     def post(self, request):
-        form = UpdateUserForm(request.POST)
+        form = UpdateUserForm(request.POST, instance=request.user)
         if form.is_valid():
             user = form.save(commit=False)
             user.save()
