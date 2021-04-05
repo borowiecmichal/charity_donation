@@ -37,6 +37,16 @@ class LandingPageView(View):
         }
         return render(request, 'index.html', ctx)
 
+        # if request.is_ajax:
+        #
+        #     a=request.GET['foundation_page']
+        #     lista = foundations_paginator.get_page('a')
+        #     slownik ={
+        #         el1: lista[0],
+        #         el2: lista[1]
+        #     }
+        #     return JsonResponse(slownik)
+
 
 # class AddDonationView(View):
     # def get(self, request):

@@ -75,15 +75,15 @@ class DonationForm(ModelForm):
     class Meta:
         model = Donation
         fields = (
-        'categories', 'quantity', 'institution', 'address', 'city', 'zip_code', 'phone_number', 'pick_up_date',
-        'pick_up_time', 'pick_up_comment')
+            'categories', 'quantity', 'institution', 'address', 'city', 'zip_code', 'phone_number', 'pick_up_date',
+            'pick_up_time', 'pick_up_comment')
 
-        widgets={
+        widgets = {
             'categories': CheckboxSelectMultiple,
             'institution': forms.RadioSelect
         }
 
-                # widgets = {
+        # widgets = {
         #     'email': EmailInput(attrs={'placeholder': 'Email'}),
         #     'first_name': TextInput(attrs={'placeholder': 'Imię'}),
         #     'last_name': TextInput(attrs={'placeholder': 'Nazwisko'}),
