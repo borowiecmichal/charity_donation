@@ -60,16 +60,12 @@
                 <!-- STEP 1: class .active is switching steps -->
                 <div data-step="1" class="active">
                     <h3>Zaznacz co chcesz oddać:</h3>
-                    {% for category in categories %}
+                    {% for category in form.categories %}
                         <div class="form-group form-group--checkbox">
                             <label>
-                                <input
-                                        type="checkbox"
-                                        name="categories"
-                                        value="{{ category.pk }}"
-                                />
+                                {{ category.tag }}
                                 <span class="checkbox"></span>
-                                <span class="description">{{ category.name }}</span>
+                                <span class="description">{{ category.choice_label }}</span>
                             </label>
                         </div>
                     {% endfor %}
@@ -86,7 +82,7 @@
                     <div class="form-group form-group--inline">
                         <label>
                             Liczba 60l worków:
-                            <input type="number" name="bags" step="1" min="1"/>
+                            {{ form.quantity }}
                         </label>
                     </div>
 
@@ -100,17 +96,20 @@
                 <!-- STEP 4 -->
                 <div data-step="3">
                     <h3>Wybierz organizacje, której chcesz pomóc:</h3>
-                    {% for institution in institutions %}
+                    {% for institution in form.institution %}
                         <div class="form-group form-group--checkbox">
                             <label>
-                                <input type="radio" name="organization" value="{{ institution.pk }}" data-categories="{% for cat in institution.category.all %}{{ cat.id }} {% endfor %}"/>
+{#                                <input type="radio" name="organization" value="{{ institution.id_for_label }}"#}
+{#                                       data-categories="#}
+{#                                        {% for cat in institution.category.all %}{{ cat.id }} {% endfor %}"/>#}
+                                {{ institution.tag }}
                                 <span class="checkbox radio"></span>
                                 <span class="description">
-                  <div class="title">{{ institution.name }}</div>
-                  <div class="subtitle">
-                    {{ institution.description }}
-                  </div>
-                </span>
+                                  <div class="title">{{ institution.choice_label }}</div>
+                                  <div class="subtitle">
+                                    {{ institution.description }}
+                                  </div>
+                                </span>
                             </label>
                         </div>
                     {% endfor %}

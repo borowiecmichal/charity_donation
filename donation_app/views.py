@@ -16,7 +16,7 @@ from django.views import View
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import FormView, UpdateView
 
-from donation_app.forms import UserCreateForm, LoginForm, UpdateUserForm
+from donation_app.forms import UserCreateForm, LoginForm, UpdateUserForm, DonationForm
 from donation_app.models import Donation, Institution, MyUser, Category
 
 
@@ -38,43 +38,40 @@ class LandingPageView(View):
         return render(request, 'index.html', ctx)
 
 
-class AddDonationView(View):
-    # @method_decorator(csrf_exempt)
-    # def dispatch(self, request, *args, **kwargs):
-    #     return super().dispatch(request, *args, **kwargs)
-
-    def get(self, request):
-        if request.user.is_authenticated:
-            ctx = {
-                'categories': Category.objects.all(),
-                'institutions': Institution.objects.all()
-            }
-            return render(request, 'form.html', ctx)
-        else:
-            return redirect(reverse('login'))
-
-    def post(self, request):
-        if request.is_ajax:
-
-            form_data_dict = request.POST
-            # DODAĆ MODELFORM DLA TEGO WIDOKU
-            donation = Donation.objects.create(quantity=form_data_dict['bags'],
-                                               institution_id=form_data_dict['organization'],
-                                               address=form_data_dict['address'],
-                                               phone_number=form_data_dict['phone'],
-                                               city=form_data_dict['city'],
-                                               zip_code=form_data_dict['postcode'],
-                                               pick_up_date=datetime.datetime.strptime(form_data_dict['data'],
-                                                                                       '%Y-%m-%d').date(),
-                                               pick_up_time=datetime.datetime.strptime(form_data_dict['time'],
-                                                                                       '%H:%M').time(),
-                                               pick_up_comment=form_data_dict['more_info'],
-                                               user=request.user
-                                               )
-            for id_category in request.POST['categories']:
-                donation.categories.add(Category.objects.get(id=id_category))
-            return JsonResponse({'url_success': reverse('landing-view')})
-
+# class AddDonationView(View):
+    # def get(self, request):
+    #     if request.user.is_authenticated:
+    #         ctx = {
+    #             'categories': Category.objects.all(),
+    #             'institutions': Institution.objects.all()
+    #         }
+    #         return render(request, 'form.html', ctx)
+    #     else:
+    #         return redirect(reverse('login'))
+    #
+    # def post(self, request):
+    #     if request.is_ajax:
+    #         form_data_dict = request.POST
+    #         # DODAĆ MODELFORM DLA TEGO WIDOKU
+    #         donation = Donation.objects.create(quantity=form_data_dict['bags'],
+    #                                            institution_id=form_data_dict['organization'],
+    #                                            address=form_data_dict['address'],
+    #                                            phone_number=form_data_dict['phone'],
+    #                                            city=form_data_dict['city'],
+    #                                            zip_code=form_data_dict['postcode'],
+    #                                            pick_up_date=datetime.datetime.strptime(form_data_dict['data'],
+    #                                                                                    '%Y-%m-%d').date(),
+    #                                            pick_up_time=datetime.datetime.strptime(form_data_dict['time'],
+    #                                                                                    '%H:%M').time(),
+    #                                            pick_up_comment=form_data_dict['more_info'],
+    #                                            user=request.user
+    #                                            )
+    #         for id_category in request.POST['categories']:
+    #             donation.categories.add(Category.objects.get(id=id_category))
+    #         return JsonResponse({'url_success': reverse('landing-view')})
+class AddDonationView(FormView):
+    form_class = DonationForm
+    template_name = 'form2.html'
 
 class LoginUserView(LoginView):
     form_class = LoginForm

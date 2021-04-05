@@ -1,10 +1,12 @@
 from django.contrib.auth import password_validation, authenticate, get_user_model
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.core.exceptions import ValidationError
-from django.forms import forms, EmailField, PasswordInput, CharField, TextInput, EmailInput, ModelForm
+from django.forms import EmailField, PasswordInput, CharField, TextInput, EmailInput, ModelForm, \
+    CheckboxSelectMultiple
+from django import forms
 from django.utils.text import capfirst
 
-from donation_app.models import MyUser
+from donation_app.models import MyUser, Donation
 
 
 class UserCreateForm(UserCreationForm):
@@ -67,3 +69,22 @@ class UpdateUserForm(ModelForm):
             'first_name': TextInput(attrs={'placeholder': 'Imię'}),
             'last_name': TextInput(attrs={'placeholder': 'Nazwisko'}),
         }
+
+
+class DonationForm(ModelForm):
+    class Meta:
+        model = Donation
+        fields = (
+        'categories', 'quantity', 'institution', 'address', 'city', 'zip_code', 'phone_number', 'pick_up_date',
+        'pick_up_time', 'pick_up_comment')
+
+        widgets={
+            'categories': CheckboxSelectMultiple,
+            'institution': forms.RadioSelect
+        }
+
+                # widgets = {
+        #     'email': EmailInput(attrs={'placeholder': 'Email'}),
+        #     'first_name': TextInput(attrs={'placeholder': 'Imię'}),
+        #     'last_name': TextInput(attrs={'placeholder': 'Nazwisko'}),
+        # }
