@@ -23,7 +23,7 @@ from donation_app.models import Donation, Institution, MyUser, Category
 class LandingPageView(View):
     def get(self, request):
         foundations = Institution.objects.filter(type=1)
-        foundations_paginator = Paginator(foundations, 3)
+        foundations_paginator = Paginator(foundations, 2)
         ngos = Institution.objects.filter(type=2)
         ngos_paginator = Paginator(ngos, 5)
         local_foundings = Institution.objects.filter(type=3)
@@ -43,14 +43,20 @@ class LandingPageView(View):
                     'categories': item.category_list_string
                 }
                 i += 1
+
+            print(lista.has_previous(), lista.has_next())
             print(slownik)
+            slownik['has_previous'] = lista.has_previous()
+            slownik['has_next'] = lista.has_next()
             return JsonResponse(slownik)
+
         else:
 
             ctx = {
                 'num_of_given_bags': Donation.objects.aggregate(Sum('quantity'))['quantity__sum'],
                 'num_of_supported_orgs': Donation.objects.all().distinct('institution').count(),
                 'foundations': foundations_paginator.get_page(1),
+                'foundation_number_of_pages_range': foundations_paginator.page_range,
                 'ngos': ngos,
                 'locals': local_foundings,
             }

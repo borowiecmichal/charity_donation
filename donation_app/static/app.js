@@ -63,8 +63,20 @@ document.addEventListener("DOMContentLoaded", function () {
             e.preventDefault();
             const page = e.target.dataset.page;
 
+            function print_item_in_list(list_item, data) {
+                list_item.firstElementChild.firstElementChild.innerText = data['name']
+                list_item.firstElementChild.lastElementChild.innerText = data['description']
+                list_item.lastElementChild.firstElementChild.innerText = data['categories']
+            }
+
+            let list_of_istitutions = e.target.parentElement.parentElement.previousElementSibling
+            let first_item = list_of_istitutions.firstElementChild
+            let second_item = first_item.nextElementSibling
+            let third_item = second_item.nextElementSibling
+
+
             fetch('/?' + new URLSearchParams({
-                foundation_page: parseInt(page) + 1,
+                foundation_page: parseInt(page),
                 }), {
                     headers: {
                         'X-Requested-With': 'XMLHttpResponse'
@@ -74,9 +86,15 @@ document.addEventListener("DOMContentLoaded", function () {
                 .then(res => res.json())
                 .then(res=>{
                     console.log(res);
+                    print_item_in_list(first_item, res['el0'])
+                    print_item_in_list(second_item, res['el1'])
                 })
 
-            console.log(page);
+
+            console.log(first_item, second_item, third_item);
+
+            console.log(list_of_istitutions);
+
         }
     }
 
