@@ -26,6 +26,13 @@ class Institution(models.Model):
     def __str__(self):
         return self.name
 
+    @property
+    def category_list_string(self):
+        categories = ''
+        for category in self.category.all():
+            categories += category.name + ', '
+        return categories
+
     class Meta:
         verbose_name = 'Instytucja'
         verbose_name_plural = 'Instytucje'
@@ -44,6 +51,7 @@ class Donation(models.Model):
     pick_up_comment = models.TextField()
     user = models.ForeignKey(settings.AUTH_USER_MODEL, default=None, null=True, on_delete=models.SET_DEFAULT)
     is_taken = models.BooleanField(default=False)
+
 
 class UserManager(DjangoUserManager):
     def _create_user(self, email, password, **extra_fields):

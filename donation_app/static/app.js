@@ -63,6 +63,19 @@ document.addEventListener("DOMContentLoaded", function () {
             e.preventDefault();
             const page = e.target.dataset.page;
 
+            fetch('/?' + new URLSearchParams({
+                foundation_page: parseInt(page) + 1,
+                }), {
+                    headers: {
+                        'X-Requested-With': 'XMLHttpResponse'
+                    },
+                    method: 'get'
+                })
+                .then(res => res.json())
+                .then(res=>{
+                    console.log(res);
+                })
+
             console.log(page);
         }
     }
@@ -256,7 +269,8 @@ document.addEventListener("DOMContentLoaded", function () {
             checkboxes.forEach(el => {
                 if (el.checked === true) {
                     categories_checked.push(el.parentElement.lastElementChild.innerText)
-                }})
+                }
+            })
 
             let categories_checked_id = []
             checkboxes.forEach(el => {
@@ -281,9 +295,9 @@ document.addEventListener("DOMContentLoaded", function () {
                     let inst_categories = institution.dataset.categories.split(" ");
                     console.log(institution.dataset.categories);
                     console.log(inst_categories);
-                    categories_checked_id.forEach(checked_category =>{
-                        if(!inst_categories.includes(checked_category)){
-                            institution.parentElement.parentElement.style.display='none'
+                    categories_checked_id.forEach(checked_category => {
+                        if (!inst_categories.includes(checked_category)) {
+                            institution.parentElement.parentElement.style.display = 'none'
                         }
                     })
                 })

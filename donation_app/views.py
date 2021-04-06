@@ -23,29 +23,40 @@ from donation_app.models import Donation, Institution, MyUser, Category
 class LandingPageView(View):
     def get(self, request):
         foundations = Institution.objects.filter(type=1)
-        foundations_paginator = Paginator(foundations, 5)
+        foundations_paginator = Paginator(foundations, 3)
         ngos = Institution.objects.filter(type=2)
         ngos_paginator = Paginator(ngos, 5)
         local_foundings = Institution.objects.filter(type=3)
         local_foundings_paginator = Paginator(local_foundings, 5)
-        ctx = {
-            'num_of_given_bags': Donation.objects.aggregate(Sum('quantity'))['quantity__sum'],
-            'num_of_supported_orgs': Donation.objects.all().distinct('institution').count(),
-            'foundations': foundations_paginator.get_page(1),
-            'ngos': ngos,
-            'locals': local_foundings,
-        }
-        return render(request, 'index.html', ctx)
 
-        # if request.is_ajax:
-        #
-        #     a=request.GET['foundation_page']
-        #     lista = foundations_paginator.get_page('a')
-        #     slownik ={
-        #         el1: lista[0],
-        #         el2: lista[1]
-        #     }
-        #     return JsonResponse(slownik)
+        if request.GET:
+            a = request.GET.get('foundation_page')
+            print(a)
+            lista = foundations_paginator.get_page(a)
+            print(lista)
+            slownik ={}
+            i=0
+            for item in lista:
+                slownik[f'el{i}'] = {
+                    'name': item.name,
+                    'description': item.description,
+                    'categories': item.category_list_string
+                }
+                i += 1
+            print(slownik)
+            return JsonResponse(slownik)
+        else:
+
+            ctx = {
+                'num_of_given_bags': Donation.objects.aggregate(Sum('quantity'))['quantity__sum'],
+                'num_of_supported_orgs': Donation.objects.all().distinct('institution').count(),
+                'foundations': foundations_paginator.get_page(1),
+                'ngos': ngos,
+                'locals': local_foundings,
+            }
+            return render(request, 'index.html', ctx)
+
+
 
 
 # class AddDonationView(View):
