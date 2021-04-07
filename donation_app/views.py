@@ -155,19 +155,20 @@ class UpdateProfile(View):
         return render(request, 'updateProfile.html', {'form': form, 'change_password_form': change_password_form})
 
     def post(self, request):
-        form = UpdateUserForm(request.POST, instance=request.user)
         change_password_form = PasswordChangeForm(request.user, request.POST)
+
+        if change_password_form.is_valid():
+            if change_password_form.clean_old_password():
+                user = change_password_form.save()
+                update_session_auth_hash(request, user)
+            return HttpResponse('zmiana hasla dokonana')
+
+        form = UpdateUserForm(request.POST, instance=request.user)
 
         if form.is_valid():
             print(request.user.email, form.cleaned_data['password'])
             if request.user.check_password(form.cleaned_data['password']):
-                user = form.save(commit=False)
-                user.save()
-
-        if change_password_form.is_valid():
-            user = change_password_form.save()
-            update_session_auth_hash(request, user)
-            return HttpResponse('zmiana hasla dokonana')
-
+                form.instance = request.user
+                form.save()
 
         return redirect(reverse('landing-view'))
