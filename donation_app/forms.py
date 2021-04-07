@@ -59,7 +59,8 @@ class LoginForm(AuthenticationForm):
 
 
 class UpdateUserForm(ModelForm):
-    field_order = ['email', 'first_name', 'last_name']
+    password = CharField(max_length=128, widget=PasswordInput(attrs={'placeholder': 'Hasło'}), help_text='Podaj hasło')
+    field_order = ['password', 'email', 'first_name', 'last_name']
 
     class Meta:
         model = MyUser
