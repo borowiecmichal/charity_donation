@@ -15,7 +15,14 @@
                     <p style="color: red">{{ error }}</p>
                 {% endfor %}
             {% endfor %}
+            <div class="form-group form-group--buttons">
+                <button class="btn" type="submit">Zapisz</button>
+            </div>
+        </form>
 
+        <form method="post">
+            {% csrf_token %}
+            {{ change_password_form.as_p }}
             <div class="form-group form-group--buttons">
                 <button class="btn" type="submit">Zapisz</button>
             </div>

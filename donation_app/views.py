@@ -1,7 +1,8 @@
 import datetime
 import json
 
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
+from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.models import User
 from django.contrib.auth.password_validation import validate_password
 from django.contrib.auth.views import LoginView
@@ -34,8 +35,8 @@ class LandingPageView(View):
             print(a)
             lista = foundations_paginator.get_page(a)
             print(lista)
-            slownik ={}
-            i=0
+            slownik = {}
+            i = 0
             for item in lista:
                 slownik[f'el{i}'] = {
                     'name': item.name,
@@ -63,42 +64,41 @@ class LandingPageView(View):
             return render(request, 'index.html', ctx)
 
 
-
-
 # class AddDonationView(View):
-    # def get(self, request):
-    #     if request.user.is_authenticated:
-    #         ctx = {
-    #             'categories': Category.objects.all(),
-    #             'institutions': Institution.objects.all()
-    #         }
-    #         return render(request, 'form.html', ctx)
-    #     else:
-    #         return redirect(reverse('login'))
-    #
-    # def post(self, request):
-    #     if request.is_ajax:
-    #         form_data_dict = request.POST
-    #         # DODAĆ MODELFORM DLA TEGO WIDOKU
-    #         donation = Donation.objects.create(quantity=form_data_dict['bags'],
-    #                                            institution_id=form_data_dict['organization'],
-    #                                            address=form_data_dict['address'],
-    #                                            phone_number=form_data_dict['phone'],
-    #                                            city=form_data_dict['city'],
-    #                                            zip_code=form_data_dict['postcode'],
-    #                                            pick_up_date=datetime.datetime.strptime(form_data_dict['data'],
-    #                                                                                    '%Y-%m-%d').date(),
-    #                                            pick_up_time=datetime.datetime.strptime(form_data_dict['time'],
-    #                                                                                    '%H:%M').time(),
-    #                                            pick_up_comment=form_data_dict['more_info'],
-    #                                            user=request.user
-    #                                            )
-    #         for id_category in request.POST['categories']:
-    #             donation.categories.add(Category.objects.get(id=id_category))
-    #         return JsonResponse({'url_success': reverse('landing-view')})
+# def get(self, request):
+#     if request.user.is_authenticated:
+#         ctx = {
+#             'categories': Category.objects.all(),
+#             'institutions': Institution.objects.all()
+#         }
+#         return render(request, 'form.html', ctx)
+#     else:
+#         return redirect(reverse('login'))
+#
+# def post(self, request):
+#     if request.is_ajax:
+#         form_data_dict = request.POST
+#         # DODAĆ MODELFORM DLA TEGO WIDOKU
+#         donation = Donation.objects.create(quantity=form_data_dict['bags'],
+#                                            institution_id=form_data_dict['organization'],
+#                                            address=form_data_dict['address'],
+#                                            phone_number=form_data_dict['phone'],
+#                                            city=form_data_dict['city'],
+#                                            zip_code=form_data_dict['postcode'],
+#                                            pick_up_date=datetime.datetime.strptime(form_data_dict['data'],
+#                                                                                    '%Y-%m-%d').date(),
+#                                            pick_up_time=datetime.datetime.strptime(form_data_dict['time'],
+#                                                                                    '%H:%M').time(),
+#                                            pick_up_comment=form_data_dict['more_info'],
+#                                            user=request.user
+#                                            )
+#         for id_category in request.POST['categories']:
+#             donation.categories.add(Category.objects.get(id=id_category))
+#         return JsonResponse({'url_success': reverse('landing-view')})
 class AddDonationView(FormView):
     form_class = DonationForm
     template_name = 'form2.html'
+
 
 class LoginUserView(LoginView):
     form_class = LoginForm
@@ -150,11 +150,24 @@ class UpdateProfile(View):
             'last_name': request.user.last_name,
             'email': request.user.email,
         })
-        return render(request, 'updateProfile.html', {'form': form})
+
+        change_password_form = PasswordChangeForm(request.user)
+        return render(request, 'updateProfile.html', {'form': form, 'change_password_form': change_password_form})
 
     def post(self, request):
         form = UpdateUserForm(request.POST, instance=request.user)
+        change_password_form = PasswordChangeForm(request.POST)
+
         if form.is_valid():
-            user = form.save(commit=False)
-            user.save()
-            return redirect(reverse('landing-view'))
+            print(request.user.email, form.cleaned_data['password'])
+            if request.user.check_password(form.cleaned_data['password']):
+                user = form.save(commit=False)
+                user.save()
+
+        if change_password_form.is_valid():
+            form.save()
+            update_session_auth_hash(request, form.user)
+            return HttpResponse('zmiana hasla dokonana')
+
+
+        return redirect(reverse('landing-view'))
