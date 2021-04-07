@@ -156,7 +156,7 @@ class UpdateProfile(View):
 
     def post(self, request):
         form = UpdateUserForm(request.POST, instance=request.user)
-        change_password_form = PasswordChangeForm(request.POST)
+        change_password_form = PasswordChangeForm(request.user, request.POST)
 
         if form.is_valid():
             print(request.user.email, form.cleaned_data['password'])
@@ -165,8 +165,8 @@ class UpdateProfile(View):
                 user.save()
 
         if change_password_form.is_valid():
-            form.save()
-            update_session_auth_hash(request, form.user)
+            user = change_password_form.save()
+            update_session_auth_hash(request, user)
             return HttpResponse('zmiana hasla dokonana')
 
 
