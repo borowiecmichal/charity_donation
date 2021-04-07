@@ -74,6 +74,7 @@ class UpdateUserForm(ModelForm):
 
 class DonationForm(ModelForm):
     class Meta:
+        #tutaj walidatory
         model = Donation
         fields = (
             'categories', 'quantity', 'institution', 'address', 'city', 'zip_code', 'phone_number', 'pick_up_date',
@@ -84,8 +85,3 @@ class DonationForm(ModelForm):
             'institution': forms.RadioSelect
         }
 
-        # widgets = {
-        #     'email': EmailInput(attrs={'placeholder': 'Email'}),
-        #     'first_name': TextInput(attrs={'placeholder': 'Imię'}),
-        #     'last_name': TextInput(attrs={'placeholder': 'Nazwisko'}),
-        # }

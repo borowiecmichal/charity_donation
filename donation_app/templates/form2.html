@@ -63,7 +63,7 @@
                     {% for category in form.categories %}
                         <div class="form-group form-group--checkbox">
                             <label>
-                                {{ category.input }}
+                                {{ category.tag }}
                                 <span class="checkbox"></span>
                                 <span class="description">{{ category.choice_label }}</span>
                             </label>
@@ -138,13 +138,13 @@
 
                             <div class="form-group form-group--inline">
                                 <label>
-                                    Kod pocztowy <input type="text" name="postcode"/>
+                                    Kod pocztowy <input type="text" name="zip_code"/>
                                 </label>
                             </div>
 
                             <div class="form-group form-group--inline">
                                 <label>
-                                    Numer telefonu <input type="phone" name="phone"/>
+                                    Numer telefonu <input type="phone" name="phone_number"/>
                                 </label>
                             </div>
                         </div>
@@ -152,17 +152,17 @@
                         <div class="form-section--column">
                             <h4>Termin odbioru</h4>
                             <div class="form-group form-group--inline">
-                                <label> Data <input type="date" name="data"/> </label>
+                                <label> Data <input type="date" name="pick_up_date"/> </label>
                             </div>
 
                             <div class="form-group form-group--inline">
-                                <label> Godzina <input type="time" name="time"/> </label>
+                                <label> Godzina <input type="time" name="pick_up_time"/> </label>
                             </div>
 
                             <div class="form-group form-group--inline">
                                 <label>
                                     Uwagi dla kuriera
-                                    <textarea name="more_info" rows="5"></textarea>
+                                    <textarea name="pick_up_comment" rows="5"></textarea>
                                 </label>
                             </div>
                         </div>

@@ -16,7 +16,7 @@
                 {% endfor %}
             {% endfor %}
             <div class="form-group form-group--buttons">
-                <button class="btn" type="submit">Zapisz</button>
+                <button class="btn" type="submit" name="form">Zapisz</button>
             </div>
         </form>
 
@@ -24,7 +24,7 @@
             {% csrf_token %}
             {{ change_password_form.as_p }}
             <div class="form-group form-group--buttons">
-                <button class="btn" type="submit">Zapisz</button>
+                <button class="btn" type="submit" name="form2">Zapisz</button>
             </div>
         </form>
     </section>
